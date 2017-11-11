@@ -1720,12 +1720,10 @@ public:
         return false;
     }
 
-    // Adds non-virtual runtime custom methods
+    // Adds support of non-virtual runtime custom methods
     static if(WIDGET_CUSTOM_METHODS) {
-        alias CustomMethodCallback = void delegate(Widget);
-
-        static struct CustomMethodArgs {
-            this(CustomMethodCallback d) {
+        static struct CustomMethodArgs(TCallback) {
+            this(TCallback d) {
                 isDlgSet = true;
                 dlg = d;
             }
@@ -1736,19 +1734,19 @@ public:
 
             private bool isDlgSet = false;
             private union {
-                CustomMethodCallback dlg;
+                TCallback dlg;
                 Widget widget;
             }
         }
 
-        static void customMethod(string uniqName)(CustomMethodArgs args) {
-            static CustomMethodCallback dlg;
+        static auto customMethod(string uniqName, Args)(Args args) {
+            static typeof(Args.dlg) dlg;
 
             if(args.isDlgSet)
                 dlg = args.dlg;
             else
                 if(dlg !is null)
-                    dlg(args.widget);
+                    return dlg(args.widget);
         }
     }
 }
