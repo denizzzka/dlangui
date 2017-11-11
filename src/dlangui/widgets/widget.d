@@ -1719,6 +1719,24 @@ public:
         mixin(generatePropertySetters("margins", "padding"));
         return false;
     }
+
+    alias CustomCallback = void delegate(Widget);
+
+    struct CustomMethodArgs
+    {
+        CustomCallback dlg;
+        Widget widget;
+    }
+
+    static void customMethod(string uniqName)(CustomMethodArgs args)
+    {
+        static CustomCallback dlg;
+
+        if(dlg is null)
+            dlg = args.dlg;
+        else
+            dlg(args.widget);
+    }
 }
 
 /** Widget list holder. */
