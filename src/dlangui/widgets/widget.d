@@ -1728,7 +1728,7 @@ public:
                 dlg = d;
             }
 
-            this(Widget w) {
+            this(inout Widget w) inout {
                 widget = w;
             }
 
