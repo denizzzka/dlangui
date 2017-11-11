@@ -1739,14 +1739,17 @@ public:
             }
         }
 
-        static auto customMethod(string uniqName, Args)(Args args) {
+        static auto customMethod(string uniqName, Args, OptionalArgs ...)(Args args, OptionalArgs optional) {
             static typeof(Args.dlg) dlg;
 
             if(args.isDlgSet) {
                 dlg = args.dlg;
             } else {
-                if(dlg !is null)
-                    return dlg(args.widget);
+                if(dlg !is null) {
+                    import core.vararg;
+
+                    return dlg(args.widget, optional);
+                }
             }
 
             import std.traits;
