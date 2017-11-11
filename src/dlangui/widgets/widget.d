@@ -1722,20 +1722,37 @@ public:
 
     alias CustomCallback = void delegate(Widget);
 
-    struct CustomMethodArgs
+    static struct CustomMethodArgs
     {
-        CustomCallback dlg;
-        Widget widget;
+        this(CustomCallback d)
+        {
+            isDlgSet = true;
+            dlg = d;
+        }
+
+        this(Widget w)
+        {
+            widget = w;
+        }
+
+        private bool isDlgSet = false;
+
+        private union
+        {
+            CustomCallback dlg;
+            Widget widget;
+        }
     }
 
     static void customMethod(string uniqName)(CustomMethodArgs args)
     {
         static CustomCallback dlg;
 
-        if(dlg is null)
+        if(args.isDlgSet)
             dlg = args.dlg;
         else
-            dlg(args.widget);
+            if(dlg !is null)
+                dlg(args.widget);
     }
 }
 
