@@ -1720,39 +1720,36 @@ public:
         return false;
     }
 
-    alias CustomCallback = void delegate(Widget);
+    // Adds non-virtual runtime custom methods
+    static if(WIDGET_CUSTOM_METHODS) {
+        alias CustomMethodCallback = void delegate(Widget);
 
-    static struct CustomMethodArgs
-    {
-        this(CustomCallback d)
-        {
-            isDlgSet = true;
-            dlg = d;
+        static struct CustomMethodArgs {
+            this(CustomMethodCallback d) {
+                isDlgSet = true;
+                dlg = d;
+            }
+
+            this(Widget w) {
+                widget = w;
+            }
+
+            private bool isDlgSet = false;
+            private union {
+                CustomMethodCallback dlg;
+                Widget widget;
+            }
         }
 
-        this(Widget w)
-        {
-            widget = w;
+        static void customMethod(string uniqName)(CustomMethodArgs args) {
+            static CustomMethodCallback dlg;
+
+            if(args.isDlgSet)
+                dlg = args.dlg;
+            else
+                if(dlg !is null)
+                    dlg(args.widget);
         }
-
-        private bool isDlgSet = false;
-
-        private union
-        {
-            CustomCallback dlg;
-            Widget widget;
-        }
-    }
-
-    static void customMethod(string uniqName)(CustomMethodArgs args)
-    {
-        static CustomCallback dlg;
-
-        if(args.isDlgSet)
-            dlg = args.dlg;
-        else
-            if(dlg !is null)
-                dlg(args.widget);
     }
 }
 

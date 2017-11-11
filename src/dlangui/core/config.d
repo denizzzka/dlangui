@@ -12,6 +12,7 @@ version(USE_CONSOLE) {
     enum BACKEND_CONSOLE = true;
     /// Tweaking widgets to console style drawing
     enum WIDGET_STYLE_CONSOLE = true;
+    enum WIDGET_CUSTOM_METHODS = false;
     enum BACKEND_GUI = false;
     enum BACKEND_SDL = false;
     enum BACKEND_X11 = false;
@@ -27,6 +28,7 @@ version(USE_CONSOLE) {
     {
         enum BACKEND_GUI = true;
         enum WIDGET_STYLE_CONSOLE = false;
+        enum WIDGET_CUSTOM_METHODS = false;
     }
 
     version (NO_FREETYPE) {
