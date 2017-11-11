@@ -1742,11 +1742,18 @@ public:
         static auto customMethod(string uniqName, Args)(Args args) {
             static typeof(Args.dlg) dlg;
 
-            if(args.isDlgSet)
+            if(args.isDlgSet) {
                 dlg = args.dlg;
-            else
+            } else {
                 if(dlg !is null)
                     return dlg(args.widget);
+            }
+
+            import std.traits;
+            static if(!is(ReturnType!dlg == void)) {
+                ReturnType!dlg empty_ret;
+                return empty_ret;
+            }
         }
     }
 }
