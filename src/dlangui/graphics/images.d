@@ -55,9 +55,10 @@ import std.conv : to;
 /// load and decode image from file to ColorDrawBuf, returns null if loading or decoding is failed
 ColorDrawBuf loadImage(string filename) {
     static import std.file;
+    import dlangui.platforms.common.platform: Platform;
     try {
         immutable ubyte[] data = cast(immutable ubyte[])std.file.read(filename);
-        return loadImageFromStream(data, filename);
+        return (*Platform.instance.imageLoader)(data, filename);
     } catch (Exception e) {
         Log.e("exception while loading image from file ", filename);
         Log.e(to!string(e));

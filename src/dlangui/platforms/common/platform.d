@@ -1987,10 +1987,12 @@ class Platform {
     }
 
     import dlangui.graphics.resources: loadImageFromStream;
-    protected ColorDrawBuf function(immutable ubyte[], string) _imageLoader = &loadImageFromStream;
-    void setImageLoader(ColorDrawBuf function(immutable ubyte[], string) imageLoader) {
-        _imageLoader = imageLoader;
+    alias ImageLoader = ColorDrawBuf function(immutable ubyte[] stream, string filename);
+    private ImageLoader _imageLoader = &loadImageFromStream;
+    void imageLoader(ImageLoader loader) {
+        _imageLoader = loader;
     }
+    ImageLoader imageLoader() { return _imageLoader; }
 
     ~this()
     {

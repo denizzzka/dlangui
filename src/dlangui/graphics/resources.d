@@ -1287,7 +1287,8 @@ class ImageCache {
             }
             immutable ubyte[] data = loadResourceBytes(_filename);
             if (data) {
-                _drawbuf = loadImageFromStream(data, _filename);
+                import dlangui.platforms.common.platform: Platform;
+                _drawbuf = (*Platform.instance.imageLoader)(data, _filename);
                 if (_filename.endsWith(".9.png"))
                     _drawbuf.detectNinePatch();
                 _used = true;
