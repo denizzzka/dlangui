@@ -248,8 +248,15 @@ immutable(ubyte[]) loadResourceBytes(string filename) {
     }
 }
 
+interface IDrawable {
+    abstract void drawTo(DrawBuf buf, Rect rc, uint state = 0, int tilex0 = 0, int tiley0 = 0);
+    @property abstract int width();
+    @property abstract int height();
+    @property Rect padding();
+}
+
 /// Base class for all drawables
-class Drawable : RefCountedObject {
+class Drawable : RefCountedObject, IDrawable {
     debug static __gshared int _instanceCount;
     debug @property static int instanceCount() { return _instanceCount; }
 
@@ -1280,7 +1287,7 @@ class ImageCache {
             }
             immutable ubyte[] data = loadResourceBytes(_filename);
             if (data) {
-                _drawbuf = loadImage(data, _filename);
+                _drawbuf = loadImageFromStream(data, _filename);
                 if (_filename.endsWith(".9.png"))
                     _drawbuf.detectNinePatch();
                 _used = true;

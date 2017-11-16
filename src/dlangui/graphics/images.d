@@ -57,7 +57,7 @@ ColorDrawBuf loadImage(string filename) {
     static import std.file;
     try {
         immutable ubyte[] data = cast(immutable ubyte[])std.file.read(filename);
-        return loadImage(data, filename);
+        return loadImageFromStream(data, filename);
     } catch (Exception e) {
         Log.e("exception while loading image from file ", filename);
         Log.e(to!string(e));
@@ -66,7 +66,7 @@ ColorDrawBuf loadImage(string filename) {
 }
 
 /// load and decode image from input stream to ColorDrawBuf, returns null if loading or decoding is failed
-ColorDrawBuf loadImage(immutable ubyte[] data, string filename) {
+ColorDrawBuf loadImageFromStream(immutable ubyte[] data, string filename) {
     Log.d("Loading image from file " ~ filename);
 
     import std.algorithm : endsWith;

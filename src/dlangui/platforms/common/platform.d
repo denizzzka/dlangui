@@ -1986,6 +1986,12 @@ class Platform {
         return _iconProvider;
     }
 
+    import dlangui.graphics.resources: loadImageFromStream;
+    protected ColorDrawBuf function(immutable ubyte[], string) _imageLoader = &loadImageFromStream;
+    void setImageLoader(ColorDrawBuf function(immutable ubyte[], string) imageLoader) {
+        _imageLoader = imageLoader;
+    }
+
     ~this()
     {
         if(_iconProvider) {
